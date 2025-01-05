@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useAppSelector } from "../store/hook";
 
 const Home: React.FC = () => {
+  const userrole = useAppSelector((state) => state.auth.role);
   const [query, setQuery] = useState("");
   const [database, setDatabase] = useState("school");
   const [result, setResult] = useState("");
@@ -31,6 +33,33 @@ const Home: React.FC = () => {
       setResult(JSON.stringify(data, null, 2)); // Beautify JSON response
     } catch (error: any) {
       setResult(`Error: ${error.message}`);
+    }
+  };
+
+  // Define options based on user role
+  const getDatabaseOptions = () => {
+    switch (userrole) {
+      case "Admin":
+        return (
+          <>
+            <option value="school">School</option>
+            <option value="business">Business</option>
+            <option value="hospital">Hospital</option>
+          </>
+        );
+      case "User":
+        return (
+          <>
+            <option value="school">School</option>
+            <option value="hospital">Hospital</option>
+          </>
+        );
+      default:
+        return (
+          <>
+            <option value="school">School</option>
+          </>
+        );
     }
   };
 
@@ -66,9 +95,7 @@ const Home: React.FC = () => {
             value={database}
             onChange={handleDatabaseChange}
           >
-            <option value="school">School</option>
-            <option value="business">Business</option>
-            <option value="hospital">Hospital</option>
+            {getDatabaseOptions()} {/* Render options based on user role */}
           </select>
         </div>
 
