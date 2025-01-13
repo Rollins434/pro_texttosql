@@ -18,7 +18,7 @@ const Layout: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-100 border-r border-gray-200 shadow-sm">
+      {/* <aside className="w-64 bg-gray-100 border-r border-gray-200 shadow-sm">
         <div className="p-6">
           <nav className="mt-6">
             <ul className="space-y-4">
@@ -30,18 +30,18 @@ const Layout: React.FC = () => {
                   Home
                 </Link>
               </li>
-              {/* <li>
+              <li>
                 <Link
                   to="/about"
                   className="block px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
                 >
                   About
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </nav>
         </div>
-      </aside>
+      </aside> */}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
