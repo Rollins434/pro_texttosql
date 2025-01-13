@@ -30,14 +30,14 @@ const Layout: React.FC = () => {
                   Home
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/about"
                   className="block px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
                 >
                   About
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </div>

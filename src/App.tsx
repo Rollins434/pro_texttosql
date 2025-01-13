@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
 
           {/* <Route path="register" element={<Registration />} /> */}
           {/* Protected routes */}
