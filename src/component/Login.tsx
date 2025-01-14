@@ -16,12 +16,11 @@ const Login: React.FC = () => {
   const navigate = useNavigate()
 
   const handleLogin = async () => {
-    // Dispatch the login action
     const resultAction = await dispatch(loginUser({ username, password }));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      // Optionally redirect after successful login
-      navigate("/")
+      // Use navigate with 'replace' to avoid going back to the login page
+      navigate("/", { replace: true });
     }
   };
 
