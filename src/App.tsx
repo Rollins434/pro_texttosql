@@ -8,13 +8,15 @@ import Login from "./component/Login";
 
 import ProtectedRoute from "./component/ProtectedRoute";
 import LoginLayout from "./component/LoginLayout";
+import LandingPage from "./component/Landing";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
+          <Route index  element={ <LandingPage/>} />
+          <Route path="/home"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
 
           {/* <Route path="register" element={<Registration />} /> */}
           {/* Protected routes */}
