@@ -1,0 +1,71 @@
+/* Base styles for the loader */
+.loader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loader-bar {
+  border-radius: 9999px; /* Round the edges for the bars */
+  height: 10px;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.loader-bar-1 {
+  background-color: #d0d0d0; /* Light blue */
+  width: 100%;
+}
+
+.loader-bar-2 {
+  background-color: #d0d0d0; /* Medium blue */
+  width: 72%;
+}
+
+.loader-bar-3 {
+  background-color: #d0d0d0; /* Light gray */
+  width: 60%;
+}
+
+.loader-bar-4 {
+  background-color: #d0d0d0; /* Light gray */
+  width: 100%;
+}
+
+.loader-bar-5 {
+  background-color: #d0d0d0; /* Light blue */
+  width: 100%;
+}
+
+.loader-bar-6 {
+  background-color: #d0d0d0; /* Light gray */
+  width: 100%;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  overflow: hidden;
+}

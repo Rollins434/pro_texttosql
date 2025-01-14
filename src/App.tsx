@@ -9,6 +9,7 @@ import Login from "./component/Login";
 import ProtectedRoute from "./component/ProtectedRoute";
 import LoginLayout from "./component/LoginLayout";
 import LandingPage from "./component/Landing";
+import BLoader from "./component/BLoader";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index  element={ <LandingPage/>} />
+          <Route path="/test"  element={ <BLoader/>} />
           <Route path="/home"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
 
           {/* <Route path="register" element={<Registration />} /> */}

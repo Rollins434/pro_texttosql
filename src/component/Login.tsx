@@ -5,6 +5,7 @@ import { loginUser } from "../store/authSlice";
 
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { useNavigate } from "react-router-dom";
+import BLoader from "./BLoader";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -54,6 +55,7 @@ const Login: React.FC = () => {
         </button>
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
       </div>
+  
     </div>
   );
 };
