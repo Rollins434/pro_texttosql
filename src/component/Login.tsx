@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { loginUser } from "../store/authSlice";
 
 import { useAppDispatch, useAppSelector } from "../store/hook";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -13,14 +13,14 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch(); // Use typed dispatch
   const loading = useAppSelector((state) => state.auth.loading);
   const error = useAppSelector((state) => state.auth.error);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     const resultAction = await dispatch(loginUser({ username, password }));
 
     if (loginUser.fulfilled.match(resultAction)) {
       // Use navigate with 'replace' to avoid going back to the login page
-      navigate("/", { replace: true });
+      navigate("/home",{replace:true});
     }
   };
 
