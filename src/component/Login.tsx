@@ -1,16 +1,13 @@
-// component/Login.tsx
 import React, { useState } from "react";
-
 import { loginUser } from "../store/authSlice";
-
 import { useAppDispatch, useAppSelector } from "../store/hook";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useAppDispatch(); // Use typed dispatch
+  const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.auth.loading);
   const error = useAppSelector((state) => state.auth.error);
   const navigate = useNavigate();
@@ -19,8 +16,14 @@ const Login: React.FC = () => {
     const resultAction = await dispatch(loginUser({ username, password }));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      // Use navigate with 'replace' to avoid going back to the login page
-      navigate("/home",{replace:true});
+      navigate("/home", { replace: true });
+    }
+  };
+
+  // Adding onKeyDown event to trigger login on "Enter" key press
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -33,6 +36,7 @@ const Login: React.FC = () => {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={handleKeyPress} // Added here
           className="border border-gray-300 rounded-md p-2 mb-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
@@ -40,6 +44,7 @@ const Login: React.FC = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyPress} // Added here
           className="border border-gray-300 rounded-md p-2 mb-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
