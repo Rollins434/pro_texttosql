@@ -9,6 +9,9 @@ import Login from "./component/Login";
 import ProtectedRoute from "./component/ProtectedRoute";
 import LoginLayout from "./component/LoginLayout";
 import LandingPage from "./component/Landing";
+import Schema from "./component/Schema";
+import About from "./component/About";
+import History from "./component/History";
 
 const App: React.FC = () => {
   return (
@@ -16,7 +19,10 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index  element={ <LandingPage/>} />
-          <Route path="/home"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
+          <Route path="/agent"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
+          <Route path="/schema"  element={ <Schema/>} />
+          <Route path="/about-us"  element={ <About/>} />
+          <Route path="/history"  element={ <History/>} />
 
           {/* <Route path="register" element={<Registration />} /> */}
           {/* Protected routes */}
