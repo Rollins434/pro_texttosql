@@ -4,9 +4,10 @@ const Schema: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
       <div className="max-w-full w-full   p-6 space-y-6">
-        <h1 className="text-3xl font-extrabold text-center text-gray-900">
+        <h1 className="text-3xl font-semibold text-center text-gray-900 font-inter ">
           Schema Diagram
         </h1>
+
         <iframe
           width="100%"
           height="600px"

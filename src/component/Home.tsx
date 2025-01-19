@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../store/hook";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import { clearQuery, fetchQueryResult } from "../store/queriesSlice";
 
 interface ApiResponse {
   response: string;
@@ -10,15 +11,28 @@ interface ApiResponse {
 
 const Home: React.FC = () => {
   const userrole = useAppSelector((state) => state.auth.role);
+  const { latestResult, loading, error } = useAppSelector(
+    (state) => state.queries
+  );
+  const dispatch = useAppDispatch();
+
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState(false);
+  // const [result, setResult] = useState<ApiResponse | null>(null);
+  // const [loading, setLoading] = useState(false);
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuery(e.target.value);
   };
 
-  const handleFetchResults = async () => {
+  const handleFetchResults = () => {
+    if (!query.trim()) {
+      alert("Query cannot be empty. Please enter a valid query.");
+      return;
+    }
+    dispatch(fetchQueryResult(query));
+    setQuery(""); // Clear the input after submitting
+  };
+  /*  const handleFetchResults = async () => {
     if (!query.trim()) {
         alert("Please enter a query before submitting.");
         return;
@@ -55,11 +69,11 @@ const Home: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; */
 
   const handleClear = () => {
-    setQuery("");
-    setResult(null);
+    setQuery(""); // Clear the query input field
+    dispatch(clearQuery());
   };
 
   // Function to convert table_response string into a proper HTML table
@@ -76,7 +90,7 @@ const Home: React.FC = () => {
           !row.includes("╧")
       );
 
-    const formattedRows = rows.map((row) =>
+    const formattedRows = rows?.map((row) =>
       row
         .split("│")
         .slice(1, -1)
@@ -87,7 +101,7 @@ const Home: React.FC = () => {
       <table className="w-full border-collapse border border-gray-300 mt-4">
         <thead>
           <tr className="bg-gray-200">
-            {formattedRows[0].map((header, index) => (
+            {formattedRows[0]?.map((header, index) => (
               <th key={index} className="border border-gray-300 p-2 text-left">
                 {header}
               </th>
@@ -95,7 +109,7 @@ const Home: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {formattedRows.slice(1).map((row, rowIndex) => (
+          {formattedRows?.slice(1)?.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cell, cellIndex) => (
                 <td key={cellIndex} className="border border-gray-300 p-2">
@@ -155,41 +169,38 @@ const Home: React.FC = () => {
         {loading ? (
           <Loader />
         ) : (
-          result && (
+          <>{
+            latestResult !== null && 
             <>
-              {/* SQL Query Section */}
-              <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
-                  Generated SQL Query
-                </h2>
-                <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                  {result.query || "No query generated yet"}
-                </pre>
-              </div>
-
-              {/* Natural Language Response */}
-              <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
-                  Response
-                </h2>
-                <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                  {result.response || "Results will be displayed here"}
-                </pre>
-              </div>
-
-              {/* Table Response Section */}
-              <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">
-                  Table Response
-                </h2>
-                {result.table_response ? (
-                  renderTableFromString(result.table_response)
-                ) : (
-                  <p>No table data available</p>
-                )}
-              </div>
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                Generated SQL Query
+              </h2>
+              <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
+                {latestResult?.query || "No query generated yet"}
+              </pre>
+            </div>
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                Response
+              </h2>
+              <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
+                {latestResult?.response || "Results will be displayed here"}
+              </pre>
+            </div>
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                Table Response
+              </h2>
+              {latestResult?.table_response ? (
+                renderTableFromString(latestResult?.table_response)
+              ) : (
+                <p>No table data available</p>
+              )}
+            </div>
             </>
-          )
+          }
+          </>
         )}
       </div>
     </div>
