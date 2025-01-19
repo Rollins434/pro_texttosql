@@ -1,46 +1,63 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../store/hook"; // assuming you have a selector for auth state
+import { useAppSelector } from "../store/hook";
+import texttosql from "../assets/texttosql.png";
+// import texttosql from "../assets/texttosql2.webp";
+import textsqlgif from "../assets/textsqlgif.gif";
 
 const LandingPage: React.FC = () => {
-    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated); // assuming this checks if the user is logged in
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-            <div className="max-w-5xl w-full bg-white shadow-md rounded-lg p-6 space-y-6 text-center">
-                <h1 className="text-4xl font-extrabold text-gray-500">
-                    Welcome to
-                    <span className="text-transparent bg-clip-text mx-2 bg-gradient-to-r from-cyan-500 to-orange-400">
-                         ApiCalypse Text2Sql
-                    </span>
-                </h1>
+  return (
+    <div className="min-h-screen flex flex-col items-center bg-gray-100 px-6">
+      {/* Header Section */}
+      <header className="w-full max-w-5xl text-center mt-12">
+        <h1 className="text-5xl font-extrabold text-gray-800 leading-tight">
+          Revolutionize Your Queries with
+          {/* <span className="block text-cyan-500"> */}
+          <span className="block font-bold font-sans text-transparent bg-clip-text bg-gradient-to-r from-black via-pink-600 to-red-600">
+            ApiCalypse Text2SQL
+          </span>
+        </h1>
+        <p className="mt-4 text-lg text-gray-600">
+          Effortlessly transform natural language into powerful SQL queries.
+        </p>
+      </header>
 
-                <p className="text-lg text-gray-700">
-                    Experience seamless data queries with natural language processing and tables.
-                </p>
+      {/* Image Section */}
+      <div className="w-full max-w-4xl mt-4 flex justify-center px-4">
+        <img
+          src={textsqlgif}
+          alt="Text-to-SQL Process"
+          className="w-full h-80 object-contain"
+        />
+      </div>
 
-                {/* Conditionally render the Link based on authentication */}
-                <div>
+      {/* Get Started Button */}
+      <div className="mt-2">
+        {isAuthenticated ? (
+          <Link
+            to="/agent"
+            className="px-8 py-4 text-lg font-medium text-red-500 border border-red-500 rounded-md bg-transparent hover:bg-red-500 hover:text-white transition"
+          >
+            Get Started
+          </Link>
+        ) : (
+          <Link
+            to="/login"
+            className="px-8 py-4 text-lg font-medium text-red-500 border border-red-500 rounded-md bg-transparent hover:bg-red-500 hover:text-white transition"
+          >
+            Get Started
+          </Link>
+        )}
+      </div>
 
-                {isAuthenticated ? (
-                    <Link
-                        to="/home"
-                        className="py-3 px-6 font-semibold text-white rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                    >
-                        Get Started
-                    </Link>
-                ) : (
-                    <Link
-                        to="/login"
-                        className="py-3 px-6 font-semibold text-white rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                    >
-                        Get Started
-                    </Link>
-                )}
-                </div>
-            </div>
-        </div>
-    );
+      {/* Footer Section */}
+      <footer className="mt-16 text-center text-gray-500 text-sm">
+        © 2025 ApiCalypse. All rights reserved.
+      </footer>
+    </div>
+  );
 };
 
 export default LandingPage;
