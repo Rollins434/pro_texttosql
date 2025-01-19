@@ -3,7 +3,15 @@ import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/hook";
 import { logout } from "../store/authSlice";
 import { useDispatch } from "react-redux";
-import { FaHome, FaDatabase, FaInfoCircle,FaAngleRight, FaAngleLeft } from "react-icons/fa"; // Example icons
+import {
+  FaHome,
+  FaDatabase,
+  FaInfoCircle,
+  FaAngleRight,
+  FaAngleLeft,
+  FaAddressBook,
+} from "react-icons/fa";
+import { SiClarifai } from "react-icons/si";
 
 const Layout: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -26,7 +34,7 @@ const Layout: React.FC = () => {
       <aside
         className={`${
           isSidebarCollapsed ? "w-20" : "w-64"
-        } bg-gray-100 border-r border-gray-200 shadow-sm transition-all duration-300 ease-in-out relative`}
+        } bg-gray-100 border-r border-gray-200 shadow-sm transition-all duration-100 ease-in-out relative`}
       >
         <div className="p-4 flex flex-col h-full">
           <nav className="mt-12 flex-1">
@@ -34,29 +42,107 @@ const Layout: React.FC = () => {
               <li>
                 <Link
                   to="/"
-                  className="flex items-center pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
                 >
+                  {isSidebarCollapsed ? (
+                    <FaHome className="text-xl" />
+                  ) : (
+                    <div className="flex items-center">
+                      {" "}
+                      <FaHome className="text-xl" /> <p className="pl-2">Home</p>
+                    </div>
+                  )}
+
+                  {/* <FaHome
+                      className={`${
+                        isSidebarCollapsed ? "text-xl" : "text-2xl"
+                      } transition-all duration-300`}
+                    />
+                    <span
+                      className={`ml-3 transition-all duration-300 ease-in-out overflow-hidden ${
+                        isSidebarCollapsed
+                          ? "opacity-0 translate-x-[-20px] pointer-events-none"
+                          : "opacity-100 translate-x-0"
+                      }`}
+                    >
+                      Home
+                    </span> */}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/agent"
+                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                >
+                  {isSidebarCollapsed ? (
+                    <SiClarifai className="text-xl" />
+                  ) : (
+                    <div className="flex items-center">
+                      {" "}
+                      <SiClarifai className="text-xl" /> <p className="pl-2">Agent</p>
+                    </div>
+                  )}
+
                   
-                  <FaHome className={`text-lg ${isSidebarCollapsed ? "text-xl" : "text-lg"}`} />
-                  {!isSidebarCollapsed && <span className="ml-3">Home</span>}
                 </Link>
               </li>
               <li>
                 <Link
                   to="/schema"
-                  className="flex items-center pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
                 >
-                  <FaDatabase className={`text-lg ${isSidebarCollapsed ? "text-xl" : "text-lg"}`} />
-                  {!isSidebarCollapsed && <span className="ml-3">Schema</span>}
+                   {isSidebarCollapsed ? (
+                    <FaDatabase className="text-xl" />
+                  ) : (
+                    <div className="flex items-center">
+                      {" "}
+                      <FaDatabase className="text-xl" /> <p className="pl-2">Schema</p>
+                    </div>
+                  )}
+                 {/*  <FaDatabase
+                    className={`${
+                      isSidebarCollapsed ? "text-xl" : "text-2xl"
+                    } transition-all duration-300`}
+                  />
+
+                  <span
+                    className={`ml-3 transition-all duration-300 ease-in-out overflow-hidden ${
+                      isSidebarCollapsed
+                        ? "opacity-0 translate-x-[-20px] pointer-events-none"
+                        : "opacity-100 translate-x-0"
+                    }`}
+                  >
+                    Schema
+                  </span> */}
                 </Link>
               </li>
               <li>
                 <Link
                   to="/about-us"
-                  className="flex items-center pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className="flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
                 >
-                  <FaInfoCircle className={`text-lg ${isSidebarCollapsed ? "text-xl" : "text-lg"}`} />
-                  {!isSidebarCollapsed && <span className="ml-3">About Us</span>}
+                  {isSidebarCollapsed ? (
+                    <FaInfoCircle className="text-xl" />
+                  ) : (
+                    <div className="flex items-center">
+                      {" "}
+                      <FaInfoCircle className="text-xl" /> <p className="pl-2">About</p>
+                    </div>
+                  )}
+                  {/* <FaInfoCircle
+                    className={`${
+                      isSidebarCollapsed ? "text-xl" : "text-2xl"
+                    } transition-all duration-300`}
+                  />
+                  <span
+                    className={`ml-3 transition-all duration-300 ease-in-out overflow-hidden ${
+                      isSidebarCollapsed
+                        ? "opacity-0 translate-x-[-20px] pointer-events-none"
+                        : "opacity-100 translate-x-0"
+                    }`}
+                  >
+                    About Us
+                  </span> */}
                 </Link>
               </li>
             </ul>
@@ -66,11 +152,9 @@ const Layout: React.FC = () => {
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}
-          className={`absolute top-4 -right-3 w-8 h-8 bg-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-300 ${
-            isSidebarCollapsed ? "translate-x-0" : ""
-          }`}
+          className={`absolute top-4 -right-3 w-8 h-8 bg-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-300`}
         >
-          {isSidebarCollapsed ? <FaAngleRight/> : <FaAngleLeft/>}
+          {isSidebarCollapsed ? <FaAngleRight /> : <FaAngleLeft />}
         </button>
       </aside>
 
