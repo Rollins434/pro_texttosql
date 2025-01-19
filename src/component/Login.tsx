@@ -13,6 +13,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    console.log({username,password})
     const resultAction = await dispatch(loginUser({ username, password }));
 
     if (loginUser.fulfilled.match(resultAction)) {
