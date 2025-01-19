@@ -17,8 +17,7 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [query, setQuery] = useState("");
-  // const [result, setResult] = useState<ApiResponse | null>(null);
-  // const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("Supplier");
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuery(e.target.value);
@@ -32,44 +31,6 @@ const Home: React.FC = () => {
     dispatch(fetchQueryResult(query));
     setQuery(""); // Clear the input after submitting
   };
-  /*  const handleFetchResults = async () => {
-    if (!query.trim()) {
-        alert("Please enter a query before submitting.");
-        return;
-    }
-    setLoading(true);
-    try {
-      const response = await fetch("http://localhost:8080/getData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          question: query,
-          role: "Admin",
-          model: "Gemini",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error fetching results");
-      }
-
-      const data: ApiResponse = await response.json();
-      console.log("data", data);
-      setResult(data);
-    } catch (error: any) {
-      setResult({
-        response: `Error: ${error.message}`,
-        table_response: "",
-        query: "",
-        status: false,
-      });
-    } finally {
-      setLoading(false);
-    }
-  }; */
 
   const handleClear = () => {
     setQuery(""); // Clear the query input field
@@ -134,6 +95,21 @@ const Home: React.FC = () => {
           </span>
         </h1>
 
+        {/* Dropdown for Role Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Database:
+          </label>
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+          >
+            <option value="Supplier">Supplier</option>
+            <option value="School">School</option>
+          </select>
+        </div>
+
         {/* Query Input */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -169,37 +145,37 @@ const Home: React.FC = () => {
         {loading ? (
           <Loader />
         ) : (
-          <>{
-            latestResult !== null && 
-            <>
-            <div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">
-                Generated SQL Query
-              </h2>
-              <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                {latestResult?.query || "No query generated yet"}
-              </pre>
-            </div>
-            <div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">
-                Response
-              </h2>
-              <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                {latestResult?.response || "Results will be displayed here"}
-              </pre>
-            </div>
-            <div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">
-                Table Response
-              </h2>
-              {latestResult?.table_response ? (
-                renderTableFromString(latestResult?.table_response)
-              ) : (
-                <p>No table data available</p>
-              )}
-            </div>
-            </>
-          }
+          <>
+            {latestResult !== null && (
+              <>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
+                    Generated SQL Query
+                  </h2>
+                  <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
+                    {latestResult?.query || "No query generated yet"}
+                  </pre>
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
+                    Response
+                  </h2>
+                  <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
+                    {latestResult?.response || "Results will be displayed here"}
+                  </pre>
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">
+                    Table Response
+                  </h2>
+                  {latestResult?.table_response ? (
+                    renderTableFromString(latestResult?.table_response)
+                  ) : (
+                    <p>No table data available</p>
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
@@ -221,14 +197,5 @@ function Loader() {
       <div className="h-2 bg-gray-200 rounded-full w-full"></div>
       <span className="sr-only">Loading...</span>
     </div>
-    // <div role="status" className="max-w-sm animate-pulse">
-    //     <div className="h-2.5 bg-gray-200 rounded-full w-70 mb-4"></div>
-    //     <div className="h-2 bg-gray-400 rounded-full max-w-[560px] mb-2.5"></div>
-    //     <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
-    //     <div className="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
-    //     <div className="h-2 bg-gray-200 rounded-full max-w-[400px] mb-2.5"></div>
-    //     <div className="h-2 bg-gray-200 rounded-full max-w-[360px]"></div>
-    //     <span className="sr-only">Loading...</span>
-    // </div>
   );
 }
