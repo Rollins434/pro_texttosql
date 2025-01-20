@@ -1,8 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../store/hook";
-import { CodeBlock, dracula } from "react-code-blocks";
-import { CopyToClipboard } from "react-copy-to-clipboard"; // Import the CopyToClipboard component
-import { FaClipboard } from "react-icons/fa"; // Import the icon from react-icons
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FaClipboard } from "react-icons/fa";
 
 const History: React.FC = () => {
   const { queries } = useAppSelector((state) => state.queries);
@@ -24,7 +23,7 @@ const History: React.FC = () => {
       return <p className="text-gray-600">No table data available.</p>;
     }
 
-    const formattedRows = rows?.map((row) =>
+    const formattedRows = rows.map((row) =>
       row
         .split("│")
         .slice(1, -1)
@@ -77,68 +76,68 @@ const History: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900">Query History</h1>
-      {queries.length > 0 ? (
-        queries.map((query, index) => (
-          <div key={index} className="p-6 bg-white rounded-lg shadow-md mb-6">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                User Query
-              </h2>
+    <div className="flex justify-center px-4 py-8  min-h-screen">
+      <div className="w-full max-w-7xl   rounded-lg p-6">
+        <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">
+          Query History
+        </h1>
+        {queries.length > 0 ? (
+          queries.map((query, index) => (
+            <div
+              key={index}
+              className="p-6 bg-gray-50 rounded-lg shadow-md mb-6"
+            >
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  User Query
+                </h2>
+                <pre className="w-full p-4 bg-gray-900 text-green-300 font-mono border border-gray-700 rounded-md overflow-x-auto">
+                  {query?.user_query || "No query provided yet"}
+                </pre>
+
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Generated SQL Query
+                </h2>
+                <div className="relative">
+                  <pre className="w-full p-4 bg-gray-900 text-green-300 font-mono border border-gray-700 rounded-md overflow-x-auto">
+                    {query?.query || "No query generated yet"}
+                  </pre>
+                  <CopyToClipboard text={query?.query || ""}>
+                    <button
+                      className="absolute top-0 right-0 mt-2 mr-4 p-2 bg-[#5b60676e] text-white rounded-md hover:bg-gray-700"
+                      title="Copy to clipboard"
+                    >
+                      <FaClipboard />
+                    </button>
+                  </CopyToClipboard>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Response
+                </h2>
+                <pre className="w-full p-4 bg-gray-900 text-green-300 font-mono border border-gray-700 rounded-md overflow-x-auto">
+                  {query?.response || "Results will be displayed here"}
+                </pre>
+              </div>
+
               <div>
-                <CodeBlock
-                  text={query?.user_query || "No query provided yet"}
-                  language="sql"
-                  showLineNumbers={false}
-                  theme={dracula}
-                />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Generated SQL Query
-              </h2>
-              <div className="relative ">
-                <CodeBlock
-                  text={query?.query || "No query generated yet"}
-                  language="sql"
-                  showLineNumbers={false}
-                  theme={dracula}
-                />
-                <CopyToClipboard text={query?.query || ""}>
-                  <button
-                    className="absolute top-0 right-0 mt-2 mr-4 p-2 bg-[#5b60676e] text-white rounded-md hover:bg-gray-700"
-                    title="Copy to clipboard"
-                  >
-                    <FaClipboard />
-                  </button>
-                </CopyToClipboard>
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Table Response
+                </h2>
+                {query?.table_response ? (
+                  renderTableFromString(query?.table_response)
+                ) : (
+                  <p className="text-gray-600">No table data available</p>
+                )}
               </div>
             </div>
-
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Response
-              </h2>
-              <pre className="w-full p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                {query?.response || "Results will be displayed here"}
-              </pre>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Table Response
-              </h2>
-              {query?.table_response ? (
-                renderTableFromString(query?.table_response)
-              ) : (
-                <p className="text-gray-600">No table data available</p>
-              )}
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-600">No queries found.</p>
-      )}
+          ))
+        ) : (
+          <p className="text-gray-600 text-center">No queries found.</p>
+        )}
+      </div>
     </div>
   );
 };

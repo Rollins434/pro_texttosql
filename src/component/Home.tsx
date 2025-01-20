@@ -101,7 +101,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6 space-y-6">
         {/* Title */}
         <h1 className="text-3xl font-extrabold text-center text-gray-900">
