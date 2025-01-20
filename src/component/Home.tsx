@@ -17,10 +17,19 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [query, setQuery] = useState("");
-  const [selectedRole, setSelectedRole] = useState("Supplier");
+  const [selectedModel, setSelectedModel] = useState("Gemini");
+  const [selectedDatabase, setSelectedDatabase] = useState("supply_chain");
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuery(e.target.value);
+  };
+
+  const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedModel(e.target.value);
+  };
+
+  const handleDatabaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDatabase(e.target.value);
   };
 
   const handleFetchResults = () => {
@@ -28,7 +37,14 @@ const Home: React.FC = () => {
       alert("Query cannot be empty. Please enter a valid query.");
       return;
     }
-    dispatch(fetchQueryResult(query));
+    // Pass the modelName and selectedDatabase along with the query to the dispatch action
+    dispatch(
+      fetchQueryResult({
+        query,
+        modelName: selectedModel,
+        database: selectedDatabase,
+      })
+    );
     setQuery(""); // Clear the input after submitting
   };
 
@@ -85,7 +101,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6 space-y-6">
         {/* Title */}
         <h1 className="text-3xl font-extrabold text-center text-gray-900">
@@ -95,19 +111,62 @@ const Home: React.FC = () => {
           </span>
         </h1>
 
-        {/* Dropdown for Role Selection */}
+        {/* Radio Buttons for Model Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Model:
+          </label>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-2 text-gray-800">
+              <input
+                type="radio"
+                value="Gemini"
+                checked={selectedModel === "Gemini"}
+                onChange={handleModelChange}
+                className="accent-red-500 mr-2"
+              />
+              Gemini
+            </label>
+            <label className="flex items-center space-x-2 text-gray-800">
+              <input
+                type="radio"
+                value="ChatGPT"
+                checked={selectedModel === "ChatGPT"}
+                onChange={handleModelChange}
+                className="accent-red-500 mr-2"
+              />
+              ChatGPT
+            </label>
+          </div>
+        </div>
+
+        {/* Radio Buttons for Database Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Select Database:
           </label>
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
-          >
-            <option value="Supplier">Supplier</option>
-            <option value="School">School</option>
-          </select>
+          <div className="flex items-center space-x-4">
+          <label className="flex items-center space-x-2 text-gray-800">
+              <input
+                type="radio"
+                value="supply_chain"
+                checked={selectedDatabase === "supply_chain"}
+                onChange={handleDatabaseChange}
+                className="accent-red-500 mr-2"
+              />
+              Supply Chain
+            </label>
+            <label className="flex items-center space-x-2 text-gray-800">
+              <input
+                type="radio"
+                value="banking"
+                checked={selectedDatabase === "banking"}
+                onChange={handleDatabaseChange}
+                className="accent-red-500 mr-2"
+              />
+              Banking
+            </label>
+          </div>
         </div>
 
         {/* Query Input */}
@@ -168,7 +227,8 @@ const Home: React.FC = () => {
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     Table Response
                   </h2>
-                  {latestResult?.table_response ? (
+                  {latestResult.status !== false &&
+                  latestResult?.table_response ? (
                     renderTableFromString(latestResult?.table_response)
                   ) : (
                     <p>No table data available</p>
