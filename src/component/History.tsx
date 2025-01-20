@@ -6,6 +6,44 @@ import { FaClipboard } from "react-icons/fa";
 const History: React.FC = () => {
   const { queries } = useAppSelector((state) => state.queries);
 
+  const downloadCSV = (tableString: string, filename = "table_data.csv") => {
+    const rows = tableString
+      .split("\n")
+      .filter(
+        (row) =>
+          row.includes("│") &&
+          !row.includes("╒") &&
+          !row.includes("╘") &&
+          !row.includes("╞") &&
+          !row.includes("├") &&
+          !row.includes("╧")
+      );
+
+    if (rows.length === 0) {
+      alert("No table data available to download.");
+      return;
+    }
+
+    const formattedRows = rows.map((row) =>
+      row
+        .split("│")
+        .slice(1, -1)
+        .map((cell) => cell.trim())
+    );
+
+    let csvContent = formattedRows
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const renderTableFromString = (tableString: string) => {
     const rows = tableString
       .split("\n")
@@ -126,8 +164,16 @@ const History: React.FC = () => {
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   Table Response
                 </h2>
-                {query?.table_response ? (
-                  renderTableFromString(query?.table_response)
+                {query.status !== false && query?.table_response ? (
+                  <div>
+                    {renderTableFromString(query?.table_response)}
+                    <button
+                      onClick={() => downloadCSV(query?.table_response)}
+                    className="mt-4 px-4 py-2 bg-transparent text-gray-400-600 border-2 border-black-600 rounded-md hover:border-slate-600 hover:text-black transition"
+                    >
+                      Download CSV
+                    </button>
+                  </div>
                 ) : (
                   <p className="text-gray-600">No table data available</p>
                 )}
