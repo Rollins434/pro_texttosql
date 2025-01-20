@@ -115,7 +115,7 @@ const History: React.FC = () => {
 
   return (
     <div className="flex justify-center px-4 py-8  min-h-screen">
-      <div className="w-full max-w-7xl   rounded-lg p-6">
+      <div className="w-full max-w-6xl   rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">
           Query History
         </h1>
