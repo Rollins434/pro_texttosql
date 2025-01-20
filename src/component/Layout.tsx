@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
+
 import { useAppSelector } from "../store/hook";
 import { logout } from "../store/authSlice";
 import { useDispatch } from "react-redux";
@@ -41,119 +42,113 @@ const Layout: React.FC = () => {
           <nav className="mt-12 flex-1">
             <ul className="space-y-4">
               <li>
-                <Link
+                <NavLink
                   to="/"
-                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className={({ isActive }) =>
+                    `flex pl-4 py-2 rounded-md transition ${
+                      isActive
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                    }`
+                  }
                 >
                   {isSidebarCollapsed ? (
                     <FaHome className="text-xl" />
                   ) : (
                     <div className="flex items-center">
-                      {" "}
-                      <FaHome className="text-xl" />{" "}
+                      <FaHome className="text-xl" />
                       <p className="pl-2">Home</p>
                     </div>
                   )}
-
-                  {/* <FaHome
-                      className={`${
-                        isSidebarCollapsed ? "text-xl" : "text-2xl"
-                      } transition-all duration-300`}
-                    />
-                    <span
-                      className={`ml-3 transition-all duration-300 ease-in-out overflow-hidden ${
-                        isSidebarCollapsed
-                          ? "opacity-0 translate-x-[-20px] pointer-events-none"
-                          : "opacity-100 translate-x-0"
-                      }`}
-                    >
-                      Home
-                    </span> */}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/agent"
-                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className={({ isActive }) =>
+                    `flex pl-4 py-2 rounded-md transition ${
+                      isActive
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                    }`
+                  }
                 >
                   {isSidebarCollapsed ? (
                     <SiClarifai className="text-xl" />
                   ) : (
                     <div className="flex items-center">
-                      {" "}
-                      <SiClarifai className="text-xl" />{" "}
+                      <SiClarifai className="text-xl" />
                       <p className="pl-2">Agent</p>
                     </div>
                   )}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/schema"
-                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className={({ isActive }) =>
+                    `flex pl-4 py-2 rounded-md transition ${
+                      isActive
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                    }`
+                  }
                 >
                   {isSidebarCollapsed ? (
                     <FaDatabase className="text-xl" />
                   ) : (
                     <div className="flex items-center">
-                      {" "}
-                      <FaDatabase className="text-xl" />{" "}
+                      <FaDatabase className="text-xl" />
                       <p className="pl-2">Schema</p>
                     </div>
                   )}
-                  {/*  <FaDatabase
-                    className={`${
-                      isSidebarCollapsed ? "text-xl" : "text-2xl"
-                    } transition-all duration-300`}
-                  />
-
-                  <span
-                    className={`ml-3 transition-all duration-300 ease-in-out overflow-hidden ${
-                      isSidebarCollapsed
-                        ? "opacity-0 translate-x-[-20px] pointer-events-none"
-                        : "opacity-100 translate-x-0"
-                    }`}
-                  >
-                    Schema
-                  </span> */}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/history"
-                  className=" flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className={({ isActive }) =>
+                    `flex pl-4 py-2 rounded-md transition ${
+                      isActive
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                    }`
+                  }
                 >
                   {isSidebarCollapsed ? (
                     <FaHistory className="text-xl" />
                   ) : (
                     <div className="flex items-center">
-                      {" "}
-                      <FaHistory className="text-xl" />{" "}
+                      <FaHistory className="text-xl" />
                       <p className="pl-2">History</p>
                     </div>
                   )}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/about-us"
-                  className="flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition"
+                  className={({ isActive }) =>
+                    `flex pl-4 py-2 rounded-md transition ${
+                      isActive
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                    }`
+                  }
                 >
                   {isSidebarCollapsed ? (
                     <FaInfoCircle className="text-xl" />
                   ) : (
                     <div className="flex items-center">
-                      {" "}
-                      <FaInfoCircle className="text-xl" />{" "}
+                      <FaInfoCircle className="text-xl" />
                       <p className="pl-2">About</p>
                     </div>
                   )}
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </nav>
         </div>
-
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}

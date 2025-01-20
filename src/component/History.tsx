@@ -20,12 +20,29 @@ const History: React.FC = () => {
           !row.includes("╧")
       );
 
+    if (rows.length === 0) {
+      return <p className="text-gray-600">No table data available.</p>;
+    }
+
     const formattedRows = rows?.map((row) =>
       row
         .split("│")
         .slice(1, -1)
         .map((cell) => cell.trim())
     );
+
+    // Check if the entire table consists of "null" values
+    const allNull = formattedRows.every((row) =>
+      row.every((cell) => cell.toLowerCase() === "null")
+    );
+
+    if (allNull) {
+      return (
+        <p className="text-gray-600">
+          No meaningful data available in the table.
+        </p>
+      );
+    }
 
     return (
       <table className="w-full border-collapse border border-gray-300 mt-4">

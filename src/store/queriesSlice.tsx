@@ -86,10 +86,16 @@ const initialState: QueriesState = {
 // });
 // Slice
 
+interface QueryParams {
+  query: string;
+  modelName: string;
+  database?: string;  // Optional database
+}
 // Async thunk for making API call
 export const fetchQueryResult = createAsyncThunk(
   "queries/fetchQueryResult",
-  async (query: string, { rejectWithValue }) => {
+  async ({ query, modelName,database }: QueryParams, { rejectWithValue }) => {
+    console.log({query,modelName,database})
     try {
       const response = await fetch("http://localhost:8080/getData", {
         method: "POST",
@@ -100,7 +106,7 @@ export const fetchQueryResult = createAsyncThunk(
         body: JSON.stringify({
           question: query,
           role: "Admin",
-          model: "Gemini",
+          model: modelName,  // Using the passed modelName here
         }),
       });
 
@@ -120,6 +126,7 @@ export const fetchQueryResult = createAsyncThunk(
     }
   }
 );
+
 
 const queriesSlice = createSlice({
   name: "queries",
