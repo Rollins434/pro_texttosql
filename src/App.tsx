@@ -18,11 +18,33 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index  element={ <LandingPage/>} />
-          <Route path="/agent"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Home /></ProtectedRoute>} />
-          <Route path="/schema"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Schema /></ProtectedRoute>} />
-          <Route path="/about-us"  element={ <About/>} />
-          <Route path="/history"  element={ <ProtectedRoute allowedRoles={["Admin"]}><History /></ProtectedRoute>} />
+          <Route index element={<LandingPage />} />
+          <Route
+            path="/agent"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          {/* <Route path="/schema"  element={ <ProtectedRoute allowedRoles={["Admin"]}><Schema /></ProtectedRoute>} /> */}
+          <Route
+            path="/schema/:database"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <Schema />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/about-us" element={<About />} />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <History />
+              </ProtectedRoute>
+            }
+          />
 
           {/* <Route path="register" element={<Registration />} /> */}
           {/* Protected routes */}

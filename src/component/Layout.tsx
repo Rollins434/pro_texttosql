@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 
 import { useAppSelector } from "../store/hook";
 import { logout } from "../store/authSlice";
@@ -10,13 +10,19 @@ import {
   FaInfoCircle,
   FaAngleRight,
   FaAngleLeft,
-  FaAddressBook,
   FaHistory,
+  FaChevronDown,
+  FaChevronRight,
+  FaHamburger,
+  FaCross,
 } from "react-icons/fa";
 import { SiClarifai } from "react-icons/si";
+import { FaCircleXmark, FaXmark } from "react-icons/fa6";
 
 const Layout: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSchemaOpen, setIsSchemaOpen] = useState(false);
+
   const userrole = useAppSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,12 +37,12 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex bg-gray-100 min-h-screen">
       {/* Sidebar */}
       <aside
         className={`${
           isSidebarCollapsed ? "w-20" : "w-64"
-        } bg-gray-100 border-r border-gray-200 shadow-sm transition-all duration-100 ease-in-out relative`}
+        } bg-gray-100 border-r border-gray-200 shadow-sm transition-all duration-200 ease-in-out fixed h-full z-40`}
       >
         <div className="p-4 flex flex-col h-full">
           <nav className="mt-12 flex-1">
@@ -83,27 +89,55 @@ const Layout: React.FC = () => {
                   )}
                 </NavLink>
               </li>
+
+              {/* Accordion for Schema */}
               <li>
-                <NavLink
-                  to="/schema"
-                  className={({ isActive }) =>
-                    `flex pl-4 py-2 rounded-md transition ${
-                      isActive
-                        ? "bg-red-500 text-white"
-                        : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
-                    }`
-                  }
+                <button
+                  className="flex pl-4 py-2 rounded-md text-gray-700 hover:bg-gray-300 hover:text-gray-900 transition w-full"
+                  onClick={() => setIsSchemaOpen(!isSchemaOpen)}
                 >
-                  {isSidebarCollapsed ? (
-                    <FaDatabase className="text-xl" />
-                  ) : (
-                    <div className="flex items-center">
-                      <FaDatabase className="text-xl" />
+                  <FaDatabase className="text-xl" />
+                  {!isSidebarCollapsed && (
+                    <div className="flex justify-between w-full">
                       <p className="pl-2">Schema</p>
+                      {isSchemaOpen ? <FaChevronDown /> : <FaChevronRight />}
                     </div>
                   )}
-                </NavLink>
+                </button>
+                {isSchemaOpen && !isSidebarCollapsed && (
+                  <ul className="pl-8 space-y-2 mt-2">
+                    <li>
+                      <NavLink
+                        to="/schema/banking"
+                        className={({ isActive }) =>
+                          `flex pl-4 py-2 rounded-md transition ${
+                            isActive
+                              ? "bg-red-500 text-white"
+                              : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                          }`
+                        }
+                      >
+                        Banking
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/schema/supply-chain"
+                        className={({ isActive }) =>
+                          `flex pl-4 py-2 rounded-md transition ${
+                            isActive
+                              ? "bg-red-500 text-white"
+                              : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"
+                          }`
+                        }
+                      >
+                        Supply Chain
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
               </li>
+
               <li>
                 <NavLink
                   to="/history"
@@ -149,19 +183,24 @@ const Layout: React.FC = () => {
             </ul>
           </nav>
         </div>
+
         {/* Toggle Button */}
         <button
           onClick={toggleSidebar}
-          className={`absolute top-4 -right-3 w-8 h-8 bg-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-300`}
+          className={`absolute top-4  right-5 w-8 h-8 bg-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-300`}
         >
-          {isSidebarCollapsed ? <FaAngleRight /> : <FaAngleLeft />}
+          {isSidebarCollapsed ? <FaHamburger /> : <FaCircleXmark />}
         </button>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div
+        className={`flex-1 flex flex-col transition-all duration-200 ${
+          isSidebarCollapsed ? "ml-20" : "ml-64"
+        }`}
+      >
         {/* Navbar */}
-        <header className="bg-transparent shadow-sm flex justify-between items-center p-4">
+        <header className="bg-gray-200/30 backdrop-blur-lg shadow-sm flex justify-between items-center p-4 sticky top-0 z-50 border-b border-white/20">
           <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-black via-pink-600 to-red-600">
             ApiCalypse SQLAI
           </h1>
@@ -182,7 +221,7 @@ const Layout: React.FC = () => {
         </header>
 
         {/* Outlet for Nested Routes */}
-        <main className="flex-1">
+        <main className="flex-1 p-6">
           <Outlet />
         </main>
       </div>
