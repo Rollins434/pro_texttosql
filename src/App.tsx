@@ -12,6 +12,7 @@ import LandingPage from "./component/Landing";
 import Schema from "./component/Schema";
 import About from "./component/About";
 import History from "./component/History";
+import Dashboard from "./component/Dashboard";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,14 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/agent"
             element={
