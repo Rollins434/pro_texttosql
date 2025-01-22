@@ -17,7 +17,7 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [query, setQuery] = useState("");
-  const [selectedModel, setSelectedModel] = useState("Gemini");
+  const [selectedModel, setSelectedModel] = useState("ChatGPT");
   const [selectedDatabase, setSelectedDatabase] = useState("supply_chain");
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -26,10 +26,6 @@ const Home: React.FC = () => {
 
   const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedModel(e.target.value);
-  };
-
-  const handleDatabaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDatabase(e.target.value);
   };
 
   const handleFetchResults = () => {
@@ -111,22 +107,12 @@ const Home: React.FC = () => {
           </span>
         </h1>
 
-        {/* Radio Buttons for Model Selection */}
+        {/* Dropdown for Model Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Select Model:
           </label>
           <div className="flex items-center space-x-4">
-            <label className="flex items-center space-x-2 text-gray-800">
-              <input
-                type="radio"
-                value="Gemini"
-                checked={selectedModel === "Gemini"}
-                onChange={handleModelChange}
-                className="accent-red-500 mr-2"
-              />
-              Gemini
-            </label>
             <label className="flex items-center space-x-2 text-gray-800">
               <input
                 type="radio"
@@ -137,6 +123,16 @@ const Home: React.FC = () => {
               />
               ChatGPT
             </label>
+            <label className="flex items-center space-x-2 text-gray-800">
+              <input
+                type="radio"
+                value="Gemini"
+                checked={selectedModel === "Gemini"}
+                onChange={handleModelChange}
+                className="accent-red-500 mr-2"
+              />
+              Gemini
+            </label>
           </div>
         </div>
 
@@ -145,28 +141,18 @@ const Home: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Select Database:
           </label>
-          <div className="flex items-center space-x-4">
-          <label className="flex items-center space-x-2 text-gray-800">
-              <input
-                type="radio"
-                value="supply_chain"
-                checked={selectedDatabase === "supply_chain"}
-                onChange={handleDatabaseChange}
-                className="accent-red-500 mr-2"
-              />
+          <select
+            value={selectedDatabase}
+            onChange={(e) => setSelectedDatabase(e.target.value)}
+            className="w-full p-2 border border-red-100 text-gray-800 bg-gray-100 rounded-md focus:ring-2 focus:ring-red-300 focus:outline-none"
+          >
+            <option value="supply_chain" className="text-gray-800">
               Supply Chain
-            </label>
-            <label className="flex items-center space-x-2 text-gray-800">
-              <input
-                type="radio"
-                value="banking"
-                checked={selectedDatabase === "banking"}
-                onChange={handleDatabaseChange}
-                className="accent-red-500 mr-2"
-              />
+            </option>
+            <option value="banking" className="text-gray-800">
               Banking
-            </label>
-          </div>
+            </option>
+          </select>
         </div>
 
         {/* Query Input */}

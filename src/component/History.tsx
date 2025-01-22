@@ -116,9 +116,9 @@ const History: React.FC = () => {
   return (
     <div className="flex justify-center px-4 py-8  min-h-screen">
       <div className="w-full max-w-6xl   rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">
+        <span className="block text-3xl font-bold  text-center text-transparent bg-clip-text bg-gradient-to-r  from-black via-pink-600 to-red-600 mb-6 font-poppins leading-tight">
           Query History
-        </h1>
+        </span>
         {queries.length > 0 ? (
           queries.map((query, index) => (
             <div
@@ -169,7 +169,7 @@ const History: React.FC = () => {
                     {renderTableFromString(query?.table_response)}
                     <button
                       onClick={() => downloadCSV(query?.table_response)}
-                    className="mt-4 px-4 py-2 bg-transparent text-gray-400-600 border-2 border-black-600 rounded-md hover:border-slate-600 hover:text-black transition"
+                      className="mt-4 px-4 py-2 bg-transparent text-gray-400-600 border-2 border-black-600 rounded-md hover:border-slate-600 hover:text-black transition"
                     >
                       Download CSV
                     </button>
