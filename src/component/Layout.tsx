@@ -44,7 +44,7 @@ const Layout: React.FC = () => {
           isSidebarCollapsed ? "w-20" : "w-64"
         } bg-gray-100 border-r border-gray-200 shadow-sm transition-all duration-200 ease-in-out fixed h-full z-40`}
       >
-        <div className="p-4 flex flex-col h-full">
+        <div className="p-4 mt-10 flex flex-col h-full">
           <nav className="mt-12 flex-1">
             <ul className="space-y-4">
               <li>

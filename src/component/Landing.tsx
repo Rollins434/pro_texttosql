@@ -25,11 +25,11 @@ const LandingPage: React.FC = () => {
       </header>
 
       {/* Image Section */}
-      <div className="w-full max-w-4xl mt-4 flex justify-center px-4">
+      <div className="w-full h-[300px] max-w-4xl mt-4 -mb-14 flex justify-center px-4">
         <img
           src={textsqlgif}
           alt="Text-to-SQL Process"
-          className="w-full h-80 object-contain"
+          className="w-full  object-contain"
         />
       </div>
 

@@ -17,8 +17,8 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [query, setQuery] = useState("");
-  const [selectedModel, setSelectedModel] = useState("ChatGPT");
-  const [selectedDatabase, setSelectedDatabase] = useState("supply_chain");
+  const [selectedModel, setSelectedModel] = useState("Gpt");
+  const [selectedDatabase, setSelectedDatabase] = useState("SCM");
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuery(e.target.value);
@@ -37,8 +37,8 @@ const Home: React.FC = () => {
     dispatch(
       fetchQueryResult({
         query,
-        modelName: selectedModel,
-        database: selectedDatabase,
+        model: selectedModel,
+        schemaName: selectedDatabase,
       })
     );
     setQuery(""); // Clear the input after submitting
@@ -50,31 +50,43 @@ const Home: React.FC = () => {
   };
 
   // Function to convert table_response string into a proper HTML table
-  const renderTableFromString = (tableString: string) => {
-    const rows = tableString
-      .split("\n")
-      .filter(
-        (row) =>
-          row.includes("│") &&
-          !row.includes("╒") &&
-          !row.includes("╘") &&
-          !row.includes("╞") &&
-          !row.includes("├") &&
-          !row.includes("╧")
-      );
+  const renderTableFromString = (tableData: string | any) => {
+    let formattedRows;
 
-    const formattedRows = rows?.map((row) =>
-      row
-        .split("│")
-        .slice(1, -1)
-        .map((cell) => cell.trim())
-    );
+    if (typeof tableData === "string") {
+      const rows = tableData
+        .split("\n")
+        .filter(
+          (row) =>
+            row.includes("│") &&
+            !row.includes("╒") &&
+            !row.includes("╘") &&
+            !row.includes("╞") &&
+            !row.includes("├") &&
+            !row.includes("╧")
+        );
+
+      formattedRows = rows?.map((row) =>
+        row
+          .split("│")
+          .slice(1, -1)
+          .map((cell) => cell.trim())
+      );
+    } else if (typeof tableData === "object" && tableData.length > 0) {
+      const keys = Object.keys(tableData[0]);
+      formattedRows = [
+        keys,
+        ...tableData.map((item: any) => keys.map((key) => item[key])),
+      ];
+    } else {
+      return <p>No data available</p>;
+    }
 
     return (
       <table className="w-full border-collapse border border-gray-300 mt-4">
         <thead>
           <tr className="bg-gray-200">
-            {formattedRows[0]?.map((header, index) => (
+            {formattedRows[0]?.map((header: any, index: any) => (
               <th key={index} className="border border-gray-300 p-2 text-left">
                 {header}
               </th>
@@ -84,7 +96,7 @@ const Home: React.FC = () => {
         <tbody>
           {formattedRows?.slice(1)?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {row.map((cell, cellIndex) => (
+              {row.map((cell: any, cellIndex: any) => (
                 <td key={cellIndex} className="border border-gray-300 p-2">
                   {cell}
                 </td>
@@ -116,8 +128,8 @@ const Home: React.FC = () => {
             <label className="flex items-center space-x-2 text-gray-800">
               <input
                 type="radio"
-                value="ChatGPT"
-                checked={selectedModel === "ChatGPT"}
+                value="Gpt"
+                checked={selectedModel === "Gpt"}
                 onChange={handleModelChange}
                 className="accent-red-500 mr-2"
               />
@@ -146,10 +158,10 @@ const Home: React.FC = () => {
             onChange={(e) => setSelectedDatabase(e.target.value)}
             className="w-full p-2 border border-red-100 text-gray-800 bg-gray-100 rounded-md focus:ring-2 focus:ring-red-300 focus:outline-none"
           >
-            <option value="supply_chain" className="text-gray-800">
+            <option value="SCM" className="text-gray-800">
               Supply Chain
             </option>
-            <option value="banking" className="text-gray-800">
+            <option value="BNK" className="text-gray-800">
               Banking
             </option>
           </select>
@@ -206,7 +218,8 @@ const Home: React.FC = () => {
                     Response
                   </h2>
                   <pre className="w-full max-h-64 p-4 bg-gray-100 text-gray-800 border border-gray-300 rounded-md overflow-y-auto whitespace-pre-wrap">
-                    {latestResult?.response || "Results will be displayed here"}
+                    {latestResult?.text_response ||
+                      "Results will be displayed here"}
                   </pre>
                 </div>
                 <div>
@@ -221,6 +234,14 @@ const Home: React.FC = () => {
                   )}
                 </div>
               </>
+            )}
+            {
+              <h2 className="text-xs font-normal text-gray-500 mb-2 text-right">
+                {`Response Time ${latestResult?.response_time}s`}
+              </h2>
+            }
+            {error && (
+              <h2 className="text-lg font-medium text-red-500 mb-2">{error}</h2>
             )}
           </>
         )}
