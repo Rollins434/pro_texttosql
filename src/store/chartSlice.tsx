@@ -6,6 +6,16 @@ interface InsightData {
   response_times: number[];
 }
 
+interface ApiResponse {
+  api_usage_metrics_text: {
+    success: number;
+    failure: number;
+    start_timestamp: string;
+    end_timestamp: string;
+  }[];
+  api_usage_metrics_sql: any[]; // Assuming you'll handle SQL data if it appears
+}
+
 interface ChartState {
   successFailureData: { success: number; failure: number };
   responseTimeData: number[];
@@ -38,9 +48,30 @@ export const fetchInsights = createAsyncThunk(
         throw new Error("Failed to fetch insights data");
       }
 
-      const data: InsightData = await response.json();
-      console.log("Data",data)
-      return data;
+      const data: ApiResponse = await response.json();
+      console.log("Data", data);
+
+      // Process the data to extract what you need for charts
+      const successFailureData = { success: 0, failure: 0 };
+      const responseTimes: number[] = [];
+
+      // Process the api_usage_metrics_text to extract success/failure and response time
+      data.api_usage_metrics_text.forEach((entry) => {
+        successFailureData.success += entry.success;
+        successFailureData.failure += entry.failure;
+
+        // Calculate the response time based on start and end timestamps
+        const startTime = new Date(entry.start_timestamp).getTime();
+        const endTime = new Date(entry.end_timestamp).getTime();
+        const responseTime = (endTime - startTime) / 1000; // Response time in seconds
+        responseTimes.push(responseTime);
+      });
+
+      // Return the processed data
+      return {
+        successFailureData,
+        responseTimes,
+      };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -65,11 +96,11 @@ const chartSlice = createSlice({
       })
       .addCase(
         fetchInsights.fulfilled,
-        (state, action: PayloadAction<InsightData>) => {
+        (state, action: PayloadAction<{ successFailureData: { success: number; failure: number }; responseTimes: number[] }>) => {
           state.loading = false;
-          const { success, failure, response_times } = action.payload;
-          state.successFailureData = { success, failure };
-          state.responseTimeData = response_times;
+          const { successFailureData, responseTimes } = action.payload;
+          state.successFailureData = successFailureData;
+          state.responseTimeData = responseTimes;
         }
       )
       .addCase(fetchInsights.rejected, (state, action) => {
