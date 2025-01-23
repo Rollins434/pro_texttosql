@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 interface ApiResponse {
-  response: string;
+  text_response: string;
   table_response: string;
   query: string;
   status: boolean;
   user_query: string;
+  response_time:number;
 }
 
 interface QueriesState {
@@ -88,14 +89,14 @@ const initialState: QueriesState = {
 
 interface QueryParams {
   query: string;
-  modelName: string;
-  database?: string;  // Optional database
+  model: string;
+  schemaName?: string;  // Optional schemaName
 }
 // Async thunk for making API call
 export const fetchQueryResult = createAsyncThunk(
   "queries/fetchQueryResult",
-  async ({ query, modelName,database }: QueryParams, { rejectWithValue }) => {
-    console.log({query,modelName,database})
+  async ({ query, model,schemaName }: QueryParams, { rejectWithValue }) => {
+    console.log({query,model,schemaName})
     try {
       const response = await fetch("http://localhost:8080/getData", {
         method: "POST",
@@ -106,7 +107,8 @@ export const fetchQueryResult = createAsyncThunk(
         body: JSON.stringify({
           question: query,
           role: "Admin",
-          model: modelName,  // Using the passed modelName here
+          model: model,
+          schemaName:schemaName  
         }),
       });
 
